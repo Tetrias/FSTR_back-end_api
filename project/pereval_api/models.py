@@ -7,7 +7,7 @@ class User(models.Model):
     name = models.TextField()
 
     class Meta:
-        db_table = 'users'
+        db_table = 'pereval_users'
 
 
 class Coords(models.Model):
@@ -16,14 +16,14 @@ class Coords(models.Model):
     height = models.IntegerField()
 
     class Meta:
-        db_table = 'coordinates'
+        db_table = 'preval_coordinates'
 
 
 class DifficultyLevel(models.Model):
     name = models.TextField(primary_key=True)
 
     class Meta:
-        db_table = 'difficulty_level'
+        db_table = 'pereval_level'
 
 
 class ModerationStatus(models.Model):
@@ -40,12 +40,12 @@ class Pereval(models.Model):
     connect = models.TextField(null=True)
     add_time = models.DateTimeField()
     coord_id = models.OneToOneField(Coords, on_delete=models.CASCADE)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    level_winter = models.OneToOneField(DifficultyLevel, on_delete=models.CASCADE)
-    level_summer = models.OneToOneField(DifficultyLevel, on_delete=models.CASCADE)
-    level_autumn = models.OneToOneField(DifficultyLevel, on_delete=models.CASCADE)
-    level_spring = models.OneToOneField(DifficultyLevel, on_delete=models.CASCADE)
-    status = models.OneToOneField(ModerationStatus, on_delete=models.CASCADE, default='new')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    level_winter = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE, related_name='winter_level')
+    level_summer = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE, related_name='summer_level')
+    level_autumn = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE, related_name='autumn_level')
+    level_spring = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE, related_name='spring_level')
+    status = models.ForeignKey(ModerationStatus, on_delete=models.CASCADE, default='new')
 
     class Meta:
         db_table = 'pereval_added'
