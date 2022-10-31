@@ -2,6 +2,7 @@ from django.db import models
 
 
 class User(models.Model):
+    """Модель пользователей."""
     email = models.EmailField(primary_key=True)
     phone = models.BigIntegerField()
     name = models.TextField()
@@ -11,6 +12,7 @@ class User(models.Model):
 
 
 class Coords(models.Model):
+    """Модель координат."""
     latitude = models.FloatField()
     longitude = models.FloatField()
     height = models.IntegerField()
@@ -20,6 +22,7 @@ class Coords(models.Model):
 
 
 class DifficultyLevel(models.Model):
+    """Модель сложностей перевала."""
     name = models.TextField(primary_key=True)
 
     class Meta:
@@ -27,6 +30,7 @@ class DifficultyLevel(models.Model):
 
 
 class ModerationStatus(models.Model):
+    """Модель статуса модерации."""
     name = models.TextField(primary_key=True)
 
     class Meta:
@@ -34,17 +38,22 @@ class ModerationStatus(models.Model):
 
 
 class Pereval(models.Model):
+    """Модель добавления перевала."""
     beautyTitle = models.TextField()
     title = models.TextField()
     other_titles = models.TextField()
-    connect = models.TextField(null=True)
+    connect = models.TextField(null=True, blank=True)
     add_time = models.DateTimeField()
     coord_id = models.OneToOneField(Coords, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    level_winter = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE, related_name='winter_level')
-    level_summer = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE, related_name='summer_level')
-    level_autumn = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE, related_name='autumn_level')
-    level_spring = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE, related_name='spring_level')
+    level_winter = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE,
+                                     related_name='winter_level', null=True, blank=True)
+    level_summer = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE,
+                                     related_name='summer_level', null=True, blank=True)
+    level_autumn = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE,
+                                     related_name='autumn_level', null=True, blank=True)
+    level_spring = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE,
+                                     related_name='spring_level', null=True, blank=True)
     status = models.ForeignKey(ModerationStatus, on_delete=models.CASCADE, default='new')
 
     class Meta:
@@ -52,9 +61,10 @@ class Pereval(models.Model):
 
 
 class PerevalImages(models.Model):
+    """Модель изображений."""
     title = models.TextField()
     date_added = models.DateTimeField(auto_now=True)
-    image = models.BinaryField
+    image = models.ImageField(upload_to='images')
     pereval = models.ForeignKey(Pereval, on_delete=models.CASCADE)
 
     class Meta:
@@ -62,6 +72,7 @@ class PerevalImages(models.Model):
 
 
 class PerevalAreas(models.Model):
+    """Модель зон."""
     id_parent = models.BigIntegerField()
     title = models.TextField()
 
@@ -70,6 +81,7 @@ class PerevalAreas(models.Model):
 
 
 class ActivitiesTypes(models.Model):
+    """Модель активности."""
     title = models.TextField()
 
     class Meta:
