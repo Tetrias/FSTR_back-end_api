@@ -41,7 +41,7 @@ class Pereval(models.Model):
     """Модель добавления перевала."""
     beautyTitle = models.TextField()
     title = models.TextField()
-    other_titles = models.TextField()
+    other_titles = models.TextField(null=True, blank=True)
     connect = models.TextField(null=True, blank=True)
     add_time = models.DateTimeField()
     coord_id = models.OneToOneField(Coords, on_delete=models.CASCADE)

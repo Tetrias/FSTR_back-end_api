@@ -1,10 +1,10 @@
-from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, UpdateAPIView, RetrieveAPIView
 from . import serializers
 from . import models
 
 
 class UserListAPIView(ListAPIView, ListCreateAPIView):
-    """Список пользователей"""
+    """Список пользователей и их создание"""
     serializer_class = serializers.UserSerializer
 
     def get_queryset(self):
@@ -12,7 +12,7 @@ class UserListAPIView(ListAPIView, ListCreateAPIView):
 
 
 class CoordsListAPIView(ListAPIView, ListCreateAPIView):
-    """Список координат"""
+    """Список координат и их создание"""
     serializer_class = serializers.CoordsSerializer
 
     def get_queryset(self):
@@ -20,7 +20,7 @@ class CoordsListAPIView(ListAPIView, ListCreateAPIView):
 
 
 class LevelListAPIView(ListAPIView, ListCreateAPIView):
-    """Список уровней сложности перевала"""
+    """Список уровней сложности перевала и их создание"""
     serializer_class = serializers.DifficultyLevelSerializer
 
     def get_queryset(self):
@@ -28,7 +28,7 @@ class LevelListAPIView(ListAPIView, ListCreateAPIView):
 
 
 class StatusListAPIView(ListAPIView, ListCreateAPIView):
-    """Список статуса модерации добавляемых перевалов"""
+    """Список статуса модерации добавляемых перевалов и их создание"""
     serializer_class = serializers.ModerationStatusSerializer
 
     def get_queryset(self):
@@ -36,15 +36,31 @@ class StatusListAPIView(ListAPIView, ListCreateAPIView):
 
 
 class PerevalListAPIView(ListAPIView, ListCreateAPIView):
-    """Список добавленных перевалов"""
+    """Список добавленных перевалов и их создание"""
     serializer_class = serializers.PerevalSerializer
 
     def get_queryset(self):
         return models.Pereval.objects.all()
 
 
+class PerevalUpdateAPIView(RetrieveAPIView, UpdateAPIView):
+    """Просмотр отдельной записи перевала и её редактирование"""
+    serializer_class = serializers.PerevalSerializer
+
+    def get_queryset(self):
+        return models.Pereval.objects.all().filter(pk=self.kwargs['pk'])
+
+
+class UserPerevalListAPIView(ListAPIView):
+    """Список всех записей добавленных определенным пользователем."""
+    serializer_class = serializers.PerevalSerializer
+
+    def get_queryset(self):
+        return models.Pereval.objects.all().filter(user=self.kwargs['pk'])
+
+
 class ImagesListAPIView(ListAPIView, ListCreateAPIView):
-    """Список изображений перевалов"""
+    """Список изображений перевалов и их создание"""
     serializer_class = serializers.PerevalImagesSerializer
 
     def get_queryset(self):
@@ -52,7 +68,7 @@ class ImagesListAPIView(ListAPIView, ListCreateAPIView):
 
 
 class AreasListAPIView(ListAPIView, ListCreateAPIView):
-    """Список мест перевалов"""
+    """Список мест перевалов и их создание"""
     serializer_class = serializers.PerevalAreasSerializer
 
     def get_queryset(self):
@@ -60,7 +76,7 @@ class AreasListAPIView(ListAPIView, ListCreateAPIView):
 
 
 class ActivitiesListAPIView(ListAPIView, ListCreateAPIView):
-    """Список типов активности"""
+    """Список типов активности и их создание"""
     serializer_class = serializers.ActivitiesTypesSerializer
 
     def get_queryset(self):

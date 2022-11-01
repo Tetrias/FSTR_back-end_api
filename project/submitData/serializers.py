@@ -27,8 +27,6 @@ class ModerationStatusSerializer(serializers.ModelSerializer):
 
 
 class PerevalSerializer(serializers.ModelSerializer):
-    status = serializers.PrimaryKeyRelatedField(read_only=True)
-
     class Meta:
         model = models.Pereval
         fields = (
