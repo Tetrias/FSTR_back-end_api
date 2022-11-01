@@ -4,7 +4,7 @@ from django.db import models
 class User(models.Model):
     """Модель пользователей."""
     email = models.EmailField(primary_key=True)
-    phone = models.BigIntegerField()
+    phone = models.BigIntegerField(unique=True)
     name = models.TextField()
 
     class Meta:
@@ -44,7 +44,7 @@ class Pereval(models.Model):
     other_titles = models.TextField(null=True, blank=True)
     connect = models.TextField(null=True, blank=True)
     add_time = models.DateTimeField()
-    coord_id = models.OneToOneField(Coords, on_delete=models.CASCADE)
+    coord = models.OneToOneField(Coords, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     level_winter = models.ForeignKey(DifficultyLevel, on_delete=models.CASCADE,
                                      related_name='winter_level', null=True, blank=True)
