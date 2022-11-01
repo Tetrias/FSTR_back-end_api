@@ -36,7 +36,7 @@ class PerevalSerializer(serializers.ModelSerializer):
             'other_titles',
             'connect',
             'add_time',
-            'coord_id',
+            'coord',
             'user',
             'level_winter',
             'level_summer',
