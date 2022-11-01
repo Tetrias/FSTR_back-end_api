@@ -3,7 +3,7 @@ from . import api
 
 urlpatterns = [
     path('user', api.UserListAPIView.as_view(), name='api_user'),
-    path('user__email=<str:pk>', api.UserPerevalListAPIView.as_view(), name='user_pereval_list'),
+    path('user/<str:pk>', api.UserPerevalListAPIView.as_view(), name='user_pereval_list'),
     path('coord', api.CoordsListAPIView.as_view(), name='api_coords'),
     path('level', api.LevelListAPIView.as_view(), name='api_level'),
     path('status', api.StatusListAPIView.as_view(), name='api_status'),

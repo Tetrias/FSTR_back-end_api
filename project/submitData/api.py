@@ -1,4 +1,7 @@
-from rest_framework.generics import ListAPIView, ListCreateAPIView, UpdateAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, GenericAPIView
+from rest_framework import mixins
+from rest_framework.response import Response
+
 from . import serializers
 from . import models
 
@@ -43,12 +46,22 @@ class PerevalListAPIView(ListAPIView, ListCreateAPIView):
         return models.Pereval.objects.all()
 
 
-class PerevalUpdateAPIView(RetrieveAPIView, UpdateAPIView):
+class PerevalUpdateAPIView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericAPIView):
     """Просмотр отдельной записи перевала и её редактирование"""
+    queryset = models.Pereval.objects.all()
     serializer_class = serializers.PerevalSerializer
 
-    def get_queryset(self):
-        return models.Pereval.objects.all().filter(pk=self.kwargs['pk'])
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        status_new = models.ModerationStatus.objects.get(name='new')
+        pereval = self.queryset.get(pk=self.kwargs['pk'])
+
+        if pereval.status == status_new:
+            return self.update(request, *args, **kwargs)
+        else:
+            return Response('Редактирование запрещено, запись уже была отправлена на модерацию.')
 
 
 class UserPerevalListAPIView(ListAPIView):
